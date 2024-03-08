@@ -1,19 +1,23 @@
 <?php
-require_once 'connect.php';
+require_once '../config/connect.php';
 $Type = $_POST['type'];
 $Naming = $_POST['naming'];
 
 if ($Type === 'name') {
-	$sql = "INSERT INTO name (name) VALUES ('$Naming')";
+	$table = 'name';
+	$tableValue = 'name';
 } else if ($Type === 'surname') {
-	$sql = "INSERT INTO surname (surname) VALUES ('$Naming')";
+	$table = 'surname';
+	$tableValue = 'surname';
+} else if ($Type === 'patronymic') {
+	$table = 'patronymic';
+	$tableValue = 'patronymic';
 } else {
-	$sql = "INSERT INTO patronymic (patronymic) VALUES ('$Naming')";
+	header('Location: /');
 }
 
-if ($connect->query($sql) === TRUE) {
-	header('Location: /');
-} else {
-	echo "Error: " . $sql . "<br>" . $connect->error;
-}
+mysqli_query($connect, "INSERT INTO `$table` (`id`, `$tableValue`, `frequency`) VALUES (NULL, '$Naming', NULL)");
+header('Location: /');
+
+$connect->close();
 ?>

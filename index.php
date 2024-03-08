@@ -1,5 +1,5 @@
 <?php
-require_once './vendor/preview.php';
+require_once 'config/connect.php';
 ?>
 
 <!DOCTYPE html>
@@ -217,16 +217,20 @@ require_once './vendor/preview.php';
 							<li class="nav__item">
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
 								<span class="nav__text">Всего Имён: <span class="fragment">
-										<?php echo $count; ?>
+										<?php echo $name_count; ?>
 									</span></span>
 							</li>
 							<li class="nav__item">
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
-								<span class="nav__text">Всего Отчеств: <span class="fragment">10303</span></span>
+								<span class="nav__text">Всего Отчеств: <span class="fragment">
+										<?php echo $patronymic_count; ?>
+									</span></span>
 							</li>
 							<li class="nav__item">
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
-								<span class="nav__text">Всего Фамилий: <span class="fragment">93232</span></span>
+								<span class="nav__text">Всего Фамилий: <span class="fragment">
+										<?php echo $surname_count; ?>
+									</span></span>
 							</li>
 							<li class="nav__item">
 								<button class="btn-reset nav__btn" type="button">
@@ -343,27 +347,35 @@ require_once './vendor/preview.php';
 									<td class="table__col"></td>
 								</tr>
 								<?php
-								if ($resultName->num_rows > 0) {
-									while ($row = $resultName->fetch_assoc()) {
-										if (!empty($row["id"]) && !empty($row["name"])) {
-											echo "<tr class='table__row'>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["id"] . "</span></td>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["name"] . "</span></td>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["frequency"] . "</span></td>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["id"] . "</span></td>";
-											echo "<td class='table__col'>";
-											echo "<button class='btn-reset table__btn' type='button'>";
-											echo "<img src='img/edit.svg' alt='Иконка редактирование' class='image' width='18px' />";
-											echo "</button>";
-											echo "</td>";
-											echo "<td class='table__col'>";
-											echo "<button class='btn-reset table__btn' type='button'>";
-											echo "<img src='img/del.svg' alt='Иконка удаление' class='image' width='18px' />";
-											echo "</button>";
-											echo "</td>";
-											echo "</tr>";
-										}
-									}
+								require_once 'vendor/name/read.php';
+								foreach ($items as $itemName) {
+									?>
+									<tr class='table__row'>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemName[0] ?>
+											</span></td>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemName[1] ?>
+											</span></td>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemName[2] ?>
+											</span></td>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemName[0] ?>
+											</span></td>
+										<td class='table__col'>
+											<button class='btn-reset table__btn' type='button' data-graph-path='EDITNAME'> <img
+													src='img/edit.svg' alt='Иконка редактирование' class='image' width='18px' />
+											</button>
+										</td>
+										<td class='table__col'>
+											<a href="vendor/delete.php?id=<?= $itemName[0] ?>&group=<?= $type ?>" class='table__btn'
+												type='button'>
+												<img src='img/del.svg' alt='Иконка удаление' class='image' width='18px' />
+											</a>
+										</td>
+									</tr>
+									<?php
 								}
 								?>
 							</table>
@@ -401,26 +413,32 @@ require_once './vendor/preview.php';
 									<td class="table__col"></td>
 								</tr>
 								<?php
-								if ($resultPatronymic->num_rows > 0) {
-									while ($row = $resultPatronymic->fetch_assoc()) {
-										if (!empty($row["id"]) && !empty($row["patronymic"])) {
-											echo "<tr class='table__row'>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["patronymic"] . "</span></td>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["frequency"] . "</span></td>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["id"] . "</span></td>";
-											echo "<td class='table__col'>";
-											echo "<button class='btn-reset table__btn' type='button'>";
-											echo "<img src='img/edit.svg' alt='Иконка редактирование' class='image' width='18px' />";
-											echo "</button>";
-											echo "</td>";
-											echo "<td class='table__col'>";
-											echo "<button class='btn-reset table__btn' type='button'>";
-											echo "<img src='img/del.svg' alt='Иконка удаление' class='image' width='18px' />";
-											echo "</button>";
-											echo "</td>";
-											echo "</tr>";
-										}
-									}
+								require_once 'vendor/patronymic/read.php';
+								foreach ($items as $itemPatronymic) {
+									?>
+									<tr class='table__row'>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemPatronymic[1] ?>
+											</span></td>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemPatronymic[2] ?>
+											</span></td>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemPatronymic[0] ?>
+											</span></td>
+										<td class='table__col'>
+											<button class='btn-reset table__btn' type='button' data-graph-path='EDITPATRONYMIC'>
+												<img src='img/edit.svg' alt='Иконка редактирование' class='image' width='18px' />
+											</button>
+										</td>
+										<td class='table__col'>
+											<a href="vendor/delete.php?id=<?= $itemPatronymic[0] ?>&group=<?= $type ?>" class='table__btn'
+												type='button'>
+												<img src='img/del.svg' alt='Иконка удаление' class='image' width='18px' />
+											</a>
+										</td>
+									</tr>
+									<?php
 								}
 								?>
 							</table>
@@ -458,26 +476,32 @@ require_once './vendor/preview.php';
 									<td class="table__col"></td>
 								</tr>
 								<?php
-								if ($resultSurname->num_rows > 0) {
-									while ($row = $resultSurname->fetch_assoc()) {
-										if (!empty($row["id"]) && !empty($row["surname"])) {
-											echo "<tr class='table__row'>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["surname"] . "</span></td>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["frequency"] . "</span></td>";
-											echo "<td class='table__col'><span class='table__text'>" . $row["id"] . "</span></td>";
-											echo "<td class='table__col'>";
-											echo "<button class='btn-reset table__btn' type='button'>";
-											echo "<img src='img/edit.svg' alt='Иконка редактирование' class='image' width='18px' />";
-											echo "</button>";
-											echo "</td>";
-											echo "<td class='table__col'>";
-											echo "<button class='btn-reset table__btn' type='button'>";
-											echo "<img src='img/del.svg' alt='Иконка удаление' class='image' width='18px' />";
-											echo "</button>";
-											echo "</td>";
-											echo "</tr>";
-										}
-									}
+								require_once 'vendor/surname/read.php';
+								foreach ($items as $itemSurname) {
+									?>
+									<tr class='table__row'>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemSurname[1] ?>
+											</span></td>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemSurname[2] ?>
+											</span></td>
+										<td class='table__col'><span class='table__text'>
+												<?= $itemSurname[0] ?>
+											</span></td>
+										<td class='table__col'>
+											<button class='btn-reset table__btn' type='button' data-graph-path='EDITSURNAME'>
+												<img src='img/edit.svg' alt='Иконка редактирование' class='image' width='18px' />
+											</button>
+										</td>
+										<td class='table__col'>
+											<a href="vendor/delete.php?id=<?= $itemSurname[0] ?>&group=<?= $type ?>" class='table__btn'
+												type='button'>
+												<img src='img/del.svg' alt='Иконка удаление' class='image' width='18px' />
+											</a>
+										</td>
+									</tr>
+									<?php
 								}
 								?>
 							</table>
@@ -486,6 +510,80 @@ require_once './vendor/preview.php';
 				</div>
 			</section>
 			<div class="graph-modal">
+				<div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="EDITNAME">
+					<button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
+					<div class="graph-modal__content modal">
+						<div class="modal__head">
+							<span class="modal__name">Редактировать Имя</span>
+						</div>
+						<form action="vendor/name/update.php" method='post' class="modal__form">
+							<label class="modal__label"><span class="modal__text">Наименование</span>
+								<input type="text" name="naming" class="input-reset modal__input" value='<?= $itemName[1] ?>' /></label>
+							<label class="modal__label"><span class="modal__text">Частота</span>
+								<input type="text" name="frequency" class="input-reset modal__input"
+									value='<?= $itemName[2] ?>' /></label>
+							<input type="hidden" name="id" value='<?= $itemName[0] ?>'>
+							<div class="modal__bottom">
+								<button class="btn-reset modal__btn" type="submit">
+									Сохранить
+								</button>
+								<button class="btn-reset modal__btn cancel js-modal-close" type="button">
+									Отмена
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="EDITPATRONYMIC">
+					<button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
+					<div class="graph-modal__content modal">
+						<div class="modal__head">
+							<span class="modal__name">Редактировать Отчества</span>
+						</div>
+						<form action="vendor/patronymic/update.php" method='post' class="modal__form">
+							<label class="modal__label"><span class="modal__text">Наименование</span>
+								<input type="text" name="naming" class="input-reset modal__input"
+									value='<?= $itemPatronymic[1] ?>' /></label>
+							<label class="modal__label"><span class="modal__text">Частота</span>
+								<input type="text" name="frequency" class="input-reset modal__input"
+									value='<?= $itemPatronymic[2] ?>' /></label>
+							<input type="hidden" name="id" value='<?= $itemPatronymic[0] ?>'>
+							<div class="modal__bottom">
+								<button class="btn-reset modal__btn" type="submit">
+									Сохранить
+								</button>
+								<button class="btn-reset modal__btn cancel js-modal-close" type="button">
+									Отмена
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="EDITSURNAME">
+					<button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
+					<div class="graph-modal__content modal">
+						<div class="modal__head">
+							<span class="modal__name">Редактировать Фамилия</span>
+						</div>
+						<form action="vendor/surname/update.php" method='post' class="modal__form">
+							<label class="modal__label"><span class="modal__text">Наименование</span>
+								<input type="text" name="naming" class="input-reset modal__input"
+									value='<?= $itemSurname[1] ?>' /></label>
+							<label class="modal__label"><span class="modal__text">Частота</span>
+								<input type="text" name="frequency" class="input-reset modal__input"
+									value='<?= $itemSurname[2] ?>' /></label>
+							<input type="hidden" name="id" value='<?= $itemSurname[0] ?>'>
+							<div class="modal__bottom">
+								<button class="btn-reset modal__btn" type="submit">
+									Сохранить
+								</button>
+								<button class="btn-reset modal__btn cancel js-modal-close" type="button">
+									Отмена
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
 				<div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="ADDANEWONE">
 					<button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
 					<div class="graph-modal__content modal">
@@ -508,7 +606,9 @@ require_once './vendor/preview.php';
 								</div>
 							</label>
 							<label class="modal__label"><span class="modal__text">Наименование</span>
-								<input type="text" name="naming" id="naming" class="input-reset modal__input" /></label>
+								<input oninput='displayResults()' type="text" name="naming" id="naming"
+									class="input-reset modal__input" /></label>
+							<div id="resultContainer"></div>
 							<div class="modal__bottom">
 								<button class="btn-reset modal__btn" type="submit" id='addSubmit'>
 									Добавить

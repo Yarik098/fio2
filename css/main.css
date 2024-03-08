@@ -229,8 +229,8 @@ a {
 .dropdown__list {
 	display: -ms-grid;
 	display: grid;
-	-ms-grid-columns: (1fr) [8];
-	grid-template-columns: repeat(8, 1fr);
+	-ms-grid-columns: (150px) [8];
+	grid-template-columns: repeat(8, 150px);
 	-webkit-box-align: start;
 	-ms-flex-align: start;
 	align-items: flex-start;
@@ -272,7 +272,6 @@ a {
 	-webkit-transition: color 0.2s ease-in-out;
 	-o-transition: color 0.2s ease-in-out;
 	transition: color 0.2s ease-in-out;
-	white-space: nowrap;
 }
 .dropdown__link .image {
 	width: 50px;
@@ -445,6 +444,7 @@ a {
 .graph-modal__container {
 	position: relative;
 	margin: 50px auto;
+	min-width: 1120px;
 	vertical-align: middle;
 	background-color: #fff;
 	cursor: default;

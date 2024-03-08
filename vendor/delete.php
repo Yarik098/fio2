@@ -1,16 +1,28 @@
 <?php
 
-require_once 'connect.php';
+//Удаление таблицы
 
-$id = $_POST['id'];
-echo $id;
+/*
+ * Подключаем файл для получения соединения к базе данных (PhpMyAdmin, MySQL)
+ */
 
-$delName = "DELETE FROM name WHERE id = '$id'";
-$delSurname = "DELETE FROM surname WHERE id = '$id'";
-$delPatronymic = "DELETE FROM patronymic WHERE id = '$id'";
+require_once '../config/connect.php';
 
-$connect->query($delName) === TRUE;
-$connect->query($delSurname) === TRUE;
-$connect->query($delPatronymic) === TRUE;
+/*
+ * Получаем ID и тип таблицы из адресной строки
+ */
 
-$connect->close();
+$id = $_GET['id'];
+$group = $_GET['group'];
+
+/*
+ * Делаем запрос на удаление строки из таблицы name
+ */
+
+mysqli_query($connect, "DELETE FROM `$group` WHERE `$group`.`id` = '$id'");
+
+/*
+ * Переадресация на главную страницу
+ */
+
+header('Location: /');
