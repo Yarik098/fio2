@@ -348,7 +348,7 @@
 	})()
 })()
 
-const items = document.querySelectorAll('[data-item]')
+const data = document.querySelectorAll('[data-item-add]')
 const input = document.querySelector('.js-hidden-input')
 
 items.forEach(item => {

@@ -1,23 +1,26 @@
 <?php
+
+// Подключение к БД
 require_once '../config/connect.php';
+
+
+
+// Получаем из формы данные
 $Type = $_POST['type'];
 $Naming = $_POST['naming'];
 
-if ($Type === 'name') {
-	$table = 'name';
-	$tableValue = 'name';
-} else if ($Type === 'surname') {
-	$table = 'surname';
-	$tableValue = 'surname';
-} else if ($Type === 'patronymic') {
-	$table = 'patronymic';
-	$tableValue = 'patronymic';
-} else {
-	header('Location: /');
-}
 
-mysqli_query($connect, "INSERT INTO `$table` (`id`, `$tableValue`, `frequency`) VALUES (NULL, '$Naming', NULL)");
+
+// SQL запрос чтобы вставить данные в БД
+mysqli_query($connect, "INSERT INTO `$Type` (`id`, `$Type`, `frequency`, `date`, `time`) VALUES (NULL, '$Naming', NULL, CURDATE(), DATE_FORMAT(NOW(), '%H:%i:%s'))");
+
+
+
+// Переадресация на главную страницу
 header('Location: /');
 
+
+
+// Закрываем связь с БД
 $connect->close();
 ?>

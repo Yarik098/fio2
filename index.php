@@ -217,19 +217,22 @@ require_once 'config/connect.php';
 							<li class="nav__item">
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
 								<span class="nav__text">Всего Имён: <span class="fragment">
-										<?php echo $name_count; ?>
+										<?php
+										require_once "vendor/max.php";
+										?>
 									</span></span>
 							</li>
 							<li class="nav__item">
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
 								<span class="nav__text">Всего Отчеств: <span class="fragment">
-										<?php echo $patronymic_count; ?>
+										<?php
+										require_once "vendor/max.php";
+										?>
 									</span></span>
 							</li>
 							<li class="nav__item">
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
 								<span class="nav__text">Всего Фамилий: <span class="fragment">
-										<?php echo $surname_count; ?>
 									</span></span>
 							</li>
 							<li class="nav__item">
@@ -239,13 +242,13 @@ require_once 'config/connect.php';
 								</button>
 							</li>
 							<li class="nav__item">
-								<button class="btn-reset nav__btn" type="button">
+								<button class="btn-reset nav__btn" type="button" data-graph-path="IMPORT">
 									<img src="img/import.svg" alt="Иконка Импорта" class="image" width="24px" height="24px" />
 									IMPORT
 								</button>
 							</li>
 							<li class="nav__item">
-								<button class="btn-reset nav__btn" type="button">
+								<button class="btn-reset nav__btn" type="button" data-graph-path="EXPORT">
 									<img src="img/export.svg" alt="Иконка Экспорта" class="image" width="24px" height="24px" />
 									EXPORT
 								</button>
@@ -398,17 +401,17 @@ require_once 'config/connect.php';
 									</th>
 								</tr>
 								<tr class="table__row">
+									<td class="table__col">
+										<svg class="table__search" width="15px" height="15px">
+											<use xlink:href="img/sprite.svg#search"></use>
+										</svg>
+									</td>
+									<td class="table__col">
+										<svg class="table__search" width="15px" height="15px">
+											<use xlink:href="img/sprite.svg#search"></use>
+										</svg>
+									</td>
 									<td class="table__col"></td>
-									<td class="table__col">
-										<svg class="table__search" width="15px" height="15px">
-											<use xlink:href="img/sprite.svg#search"></use>
-										</svg>
-									</td>
-									<td class="table__col">
-										<svg class="table__search" width="15px" height="15px">
-											<use xlink:href="img/sprite.svg#search"></use>
-										</svg>
-									</td>
 									<td class="table__col"></td>
 									<td class="table__col"></td>
 								</tr>
@@ -461,17 +464,17 @@ require_once 'config/connect.php';
 									</th>
 								</tr>
 								<tr class="table__row">
+									<td class="table__col">
+										<svg class="table__search" width="15px" height="15px">
+											<use xlink:href="img/sprite.svg#search"></use>
+										</svg>
+									</td>
+									<td class="table__col">
+										<svg class="table__search" width="15px" height="15px">
+											<use xlink:href="img/sprite.svg#search"></use>
+										</svg>
+									</td>
 									<td class="table__col"></td>
-									<td class="table__col">
-										<svg class="table__search" width="15px" height="15px">
-											<use xlink:href="img/sprite.svg#search"></use>
-										</svg>
-									</td>
-									<td class="table__col">
-										<svg class="table__search" width="15px" height="15px">
-											<use xlink:href="img/sprite.svg#search"></use>
-										</svg>
-									</td>
 									<td class="table__col"></td>
 									<td class="table__col"></td>
 								</tr>
@@ -593,13 +596,13 @@ require_once 'config/connect.php';
 						<form action="vendor/add.php" method='post' class="modal__form">
 							<label class="modal__label"><span class="modal__text">Выберите тип</span>
 								<div class="modal__content">
-									<div class="modal__item js-modal-item" data-item="name">
+									<div class="modal__item js-modal-item" data-item-add="name">
 										<span class="modal__item-text">Имя</span>
 									</div>
-									<div class="modal__item" data-item="patronymic">
+									<div class="modal__item" data-item-add="patronymic">
 										<span class="modal__item-text">Отчества</span>
 									</div>
-									<div class="modal__item" data-item="surname">
+									<div class="modal__item" data-item-add="surname">
 										<span class="modal__item-text">Фамилия</span>
 									</div>
 									<input type="hidden" name="type" class='js-hidden-input' value='name' />
@@ -612,6 +615,85 @@ require_once 'config/connect.php';
 							<div class="modal__bottom">
 								<button class="btn-reset modal__btn" type="submit" id='addSubmit'>
 									Добавить
+								</button>
+								<button class="btn-reset modal__btn cancel js-modal-close" type="button">
+									Отмена
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="IMPORT">
+					<button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
+					<div class="graph-modal__content modal">
+						<div class="modal__head">
+							<span class="modal__name">Импорт</span>
+						</div>
+						<form class="modal__form" action="vendor/import.php" method='post' enctype="multipart/form-data">
+							<label class="modal__label"><span class="modal__text">Выберите тип</span>
+								<div class="modal__content">
+									<div class="modal__item js-modal-item" data-item="name">
+										<span class="modal__item-text">Имя</span>
+									</div>
+									<div class="modal__item" data-item="patronymic">
+										<span class="modal__item-text">Отчества</span>
+									</div>
+									<div class="modal__item" data-item="surname">
+										<span class="modal__item-text">Фамилия</span>
+									</div>
+									<input type="hidden" name="type" class='js-hidden-input' value='name' />
+								</div>
+							</label>
+							<label class="modal__label file"><span class="modal__text">Выберите путь к файлу </span>
+								<div class="input__wrapper">
+									<input name="file" type="file" id="input__file" class="input input__file" multiple>
+									<label for="input__file" class="input__file-button">
+										<span class="input__file-icon-wrapper"><img class="input__file-icon" src="img/folder.svg"
+												alt="Выбрать файл" width="25"></span>
+										<span class="input__file-button-text">Выберите файл</span>
+									</label>
+								</div>
+							</label>
+							<div id="resultContainer"></div>
+							<div class="modal__bottom">
+								<button class="btn-reset modal__btn" type="submit" id='addSubmit'>
+									Загрузить
+								</button>
+								<button class="btn-reset modal__btn cancel js-modal-close" type="button">
+									Отмена
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="EXPORT">
+					<button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
+					<div class="graph-modal__content modal">
+						<div class="modal__head">
+							<span class="modal__name">Экспорт</span>
+						</div>
+						<form class="modal__form" action="vendor/export.php" method='post'>
+							<label class="modal__label"><span class="modal__text">Выберите тип</span>
+								<div class="modal__content">
+									<div class="modal__item js-modal-item" data-item="name">
+										<span class="modal__item-text">Имя</span>
+									</div>
+									<div class="modal__item" data-item="patronymic">
+										<span class="modal__item-text">Отчества</span>
+									</div>
+									<div class="modal__item" data-item="surname">
+										<span class="modal__item-text">Фамилия</span>
+									</div>
+									<input type="hidden" name="type" class='js-hidden-input' value='name' />
+								</div>
+							</label>
+							<label class="modal__label"><span class="modal__text">Выберите путь к файлу </span>
+								<input oninput='displayResults()' type="text" name="Filenaming" class="input-reset modal__input"
+									placeholder='Укажите имя файла' /></label>
+							<div id="resultContainer"></div>
+							<div class="modal__bottom">
+								<button class="btn-reset modal__btn" type="submit" id='addSubmit'>
+									Выгрузить
 								</button>
 								<button class="btn-reset modal__btn cancel js-modal-close" type="button">
 									Отмена

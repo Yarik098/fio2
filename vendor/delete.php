@@ -26,3 +26,9 @@ mysqli_query($connect, "DELETE FROM `$group` WHERE `$group`.`id` = '$id'");
  */
 
 header('Location: /');
+
+/*
+ * Закрываем связь с БД
+ */
+
+$connect->close();
