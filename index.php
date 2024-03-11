@@ -218,7 +218,17 @@ require_once 'config/connect.php';
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
 								<span class="nav__text">Всего Имён: <span class="fragment">
 										<?php
-										require_once "vendor/max.php";
+										$sql = "SELECT COUNT(*) AS total FROM name";
+										$result = $connect->query($sql);
+
+										// Проверяем, есть ли результат
+										if ($result->num_rows > 0) {
+											// Выводим количество записей
+											$row = $result->fetch_assoc();
+											echo $row["total"];
+										} else {
+											echo "0";
+										}
 										?>
 									</span></span>
 							</li>
@@ -226,13 +236,36 @@ require_once 'config/connect.php';
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
 								<span class="nav__text">Всего Отчеств: <span class="fragment">
 										<?php
-										require_once "vendor/max.php";
+										$sql = "SELECT COUNT(*) AS total FROM patronymic";
+										$result = $connect->query($sql);
+
+										// Проверяем, есть ли результат
+										if ($result->num_rows > 0) {
+											// Выводим количество записей
+											$row = $result->fetch_assoc();
+											echo $row["total"];
+										} else {
+											echo "0";
+										}
 										?>
 									</span></span>
 							</li>
 							<li class="nav__item">
 								<img src="img/check.svg" alt="Иконка галочки" class="image" width="24px" height="24px" />
 								<span class="nav__text">Всего Фамилий: <span class="fragment">
+										<?php
+										$sql = "SELECT COUNT(*) AS total FROM surname";
+										$result = $connect->query($sql);
+
+										// Проверяем, есть ли результат
+										if ($result->num_rows > 0) {
+											// Выводим количество записей
+											$row = $result->fetch_assoc();
+											echo $row["total"];
+										} else {
+											echo "0";
+										}
+										?>
 									</span></span>
 							</li>
 							<li class="nav__item">
@@ -314,7 +347,7 @@ require_once 'config/connect.php';
 						<div class="table__group">
 							<table class="table__content">
 								<tr class="table__row">
-									<th class="table__head">
+									<th class="table__head id">
 										<span class="table__span">№</span>
 									</th>
 									<th class="table__head">
@@ -336,9 +369,38 @@ require_once 'config/connect.php';
 								<tr class="table__row">
 									<td class="table__col"></td>
 									<td class="table__col">
-										<svg class="table__search" width="15px" height="15px">
+										<svg class="table__search js-name-search-open" onclick='nameSearch()' width="15px" height="15px">
 											<use xlink:href="img/sprite.svg#search"></use>
 										</svg>
+										<div class="search__wrapper js-name-search-menu is-hidden">
+											<div class="search__content">
+												<div class="search__head">
+													<svg class="table__search js-name-search-open" onclick='nameSearch()' width="24px"
+														height="24px">
+														<use xlink:href="img/sprite.svg#search"></use>
+													</svg>
+													<input class='input-reset' type="text" id="nameSearch">
+												</div>
+												<div class="search__snippet">
+													<span class="search__span">
+														Выберите вариант или продолжите ввод
+													</span>
+													<ul class="list-reset js-search-list">
+														<?php
+														require_once 'vendor/name/read.php';
+														foreach ($items as $itemName) {
+															?>
+															<li class="js-search-item">
+																<?= $itemName[1] ?>
+															</li>
+															<?php
+														}
+														?>
+													</ul>
+												</div>
+											</div>
+											<div class="search__bg" onclick='nameSearch()'></div>
+										</div>
 									</td>
 									<td class="table__col">
 										<svg class="table__search" width="15px" height="15px">
@@ -350,14 +412,13 @@ require_once 'config/connect.php';
 									<td class="table__col"></td>
 								</tr>
 								<?php
-								require_once 'vendor/name/read.php';
 								foreach ($items as $itemName) {
 									?>
 									<tr class='table__row'>
 										<td class='table__col'><span class='table__text'>
 												<?= $itemName[0] ?>
 											</span></td>
-										<td class='table__col'><span class='table__text'>
+										<td class='table__col special-col'><span class='table__text name-item'>
 												<?= $itemName[1] ?>
 											</span></td>
 										<td class='table__col'><span class='table__text'>
@@ -402,9 +463,39 @@ require_once 'config/connect.php';
 								</tr>
 								<tr class="table__row">
 									<td class="table__col">
-										<svg class="table__search" width="15px" height="15px">
+										<svg class="table__search js-patronymic-search-open" onclick='patronymicSearch()' width="15px"
+											height="15px">
 											<use xlink:href="img/sprite.svg#search"></use>
 										</svg>
+										<div class="search__wrapper js-patronymic-search-menu is-hidden">
+											<div class="search__content">
+												<div class="search__head">
+													<svg class="table__search js-patronymic-search-open" onclick='patronymicSearch()' width="24px"
+														height="24px">
+														<use xlink:href="img/sprite.svg#search"></use>
+													</svg>
+													<input class='input-reset' type="text" id="patronymicSearch">
+												</div>
+												<div class="search__snippet">
+													<span class="search__span">
+														Выберите вариант или продолжите ввод
+													</span>
+													<ul class="list-reset js-search-list-patronymic">
+														<?php
+														require_once 'vendor/patronymic/read.php';
+														foreach ($items as $itemPatronymic) {
+															?>
+															<li class="js-search-item-patronymic">
+																<?= $itemPatronymic[1] ?>
+															</li>
+															<?php
+														}
+														?>
+													</ul>
+												</div>
+											</div>
+											<div class="search__bg" onclick='patronymicSearch()'></div>
+										</div>
 									</td>
 									<td class="table__col">
 										<svg class="table__search" width="15px" height="15px">
@@ -416,11 +507,10 @@ require_once 'config/connect.php';
 									<td class="table__col"></td>
 								</tr>
 								<?php
-								require_once 'vendor/patronymic/read.php';
 								foreach ($items as $itemPatronymic) {
 									?>
 									<tr class='table__row'>
-										<td class='table__col'><span class='table__text'>
+										<td class='table__col special-col'><span class='table__text'>
 												<?= $itemPatronymic[1] ?>
 											</span></td>
 										<td class='table__col'><span class='table__text'>
@@ -465,9 +555,39 @@ require_once 'config/connect.php';
 								</tr>
 								<tr class="table__row">
 									<td class="table__col">
-										<svg class="table__search" width="15px" height="15px">
+										<svg class="table__search js-surname-search-open" onclick='surnameSearch()' width="15px"
+											height="15px">
 											<use xlink:href="img/sprite.svg#search"></use>
 										</svg>
+										<div class="search__wrapper js-surname-search-menu is-hidden">
+											<div class="search__content">
+												<div class="search__head">
+													<svg class="table__search js-surname-search-open" onclick='surnameSearch()' width="24px"
+														height="24px">
+														<use xlink:href="img/sprite.svg#search"></use>
+													</svg>
+													<input class='input-reset' type="text" id="surnameSearch">
+												</div>
+												<div class="search__snippet">
+													<span class="search__span">
+														Выберите вариант или продолжите ввод
+													</span>
+													<ul class="list-reset js-search-list-surname">
+														<?php
+														require_once 'vendor/surname/read.php';
+														foreach ($items as $itemSurname) {
+															?>
+															<li class="js-search-item-surname">
+																<?= $itemSurname[1] ?>
+															</li>
+															<?php
+														}
+														?>
+													</ul>
+												</div>
+											</div>
+											<div class="search__bg" onclick='surnameSearch()'></div>
+										</div>
 									</td>
 									<td class="table__col">
 										<svg class="table__search" width="15px" height="15px">
@@ -483,7 +603,7 @@ require_once 'config/connect.php';
 								foreach ($items as $itemSurname) {
 									?>
 									<tr class='table__row'>
-										<td class='table__col'><span class='table__text'>
+										<td class='table__col special-col'><span class='table__text'>
 												<?= $itemSurname[1] ?>
 											</span></td>
 										<td class='table__col'><span class='table__text'>
@@ -708,3 +828,4 @@ require_once 'config/connect.php';
 </body>
 
 </html>
+<?php $connect->close(); ?>

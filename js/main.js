@@ -348,6 +348,93 @@
 	})()
 })()
 
+function nameSearch() {
+	const nameOpen = document.querySelector('.js-name-search-open')
+	const nameMenu = document.querySelector('.js-name-search-menu')
+	nameMenu.classList.toggle('is-hidden')
+}
+
+function patronymicSearch() {
+	const patronymicOpen = document.querySelector('.js-patronymic-search-open')
+	const patronymicMenu = document.querySelector('.js-patronymic-search-menu')
+	patronymicMenu.classList.toggle('is-hidden')
+}
+
+function surnameSearch() {
+	const surnameOpen = document.querySelector('.js-surname-search-open')
+	const surnameMenu = document.querySelector('.js-surname-search-menu')
+	surnameMenu.classList.toggle('is-hidden')
+}
+
+const nameSearchInput = document.getElementById('nameSearch')
+const nameList = document.querySelector('.js-search-list')
+const names = [...document.querySelectorAll('.js-search-item')].map(
+	item => item.innerText
+)
+
+nameSearchInput.addEventListener('input', () => {
+	const searchTerm = nameSearchInput.value.toLowerCase()
+	const filteredNames = names.filter(name =>
+		name.toLowerCase().includes(searchTerm)
+	)
+	displayNames(filteredNames)
+})
+
+function displayNames(filteredNames) {
+	nameList.innerHTML = ''
+	filteredNames.forEach(name => {
+		const li = document.createElement('li')
+		li.textContent = name
+		nameList.appendChild(li)
+	})
+}
+
+const patronymicSearchInput = document.getElementById('patronymicSearch')
+const patronymicList = document.querySelector('.js-search-list-patronymic')
+const patronymics = [
+	...document.querySelectorAll('.js-search-item-patronymic'),
+].map(item => item.innerText)
+
+patronymicSearchInput.addEventListener('input', () => {
+	const searchTerm = patronymicSearchInput.value.toLowerCase()
+	const filteredPatronymics = patronymics.filter(patronymic =>
+		patronymic.toLowerCase().includes(searchTerm)
+	)
+	displayPatronymics(filteredPatronymics)
+})
+
+function displayPatronymics(filteredPatronymics) {
+	patronymicList.innerHTML = ''
+	filteredPatronymics.forEach(patronymic => {
+		const li = document.createElement('li')
+		li.textContent = patronymic
+		patronymicList.appendChild(li)
+	})
+}
+
+const surnameSearchInput = document.getElementById('surnameSearch')
+const surnameList = document.querySelector('.js-search-list-surname')
+const surnames = [...document.querySelectorAll('.js-search-item-surname')].map(
+	item => item.innerText
+)
+
+surnameSearchInput.addEventListener('input', () => {
+	const searchTerm = surnameSearchInput.value.toLowerCase()
+	const filteredSurnames = surnames.filter(surname =>
+		surname.toLowerCase().includes(searchTerm)
+	)
+	displaySurnames(filteredSurnames)
+})
+
+function displaySurnames(filteredSurnames) {
+	surnameList.innerHTML = ''
+	filteredSurnames.forEach(surname => {
+		const li = document.createElement('li')
+		li.textContent = surname
+		surnameList.appendChild(li)
+	})
+}
+
 const data = document.querySelectorAll('[data-item-add]')
 const input = document.querySelector('.js-hidden-input')
 
